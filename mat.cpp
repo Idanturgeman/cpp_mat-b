@@ -3,14 +3,7 @@ using namespace std;
 #include<vector>
 #include<stdexcept>
 
-/**
- * 
- * 
- *  
- * The algorithm is based on https://codegolf.stackexchange.com/questions/241219/mat-printing-matrix
- *
- * 
- */
+
 namespace ariel {
    string mat(int columns, int rows, char char_a, char char_b) {
       int temp1; 
@@ -53,11 +46,11 @@ namespace ariel {
 
       vector < vector <int>> matrixmin(rows, vector <int> (columns, 0)); // Minimum cell values of both matrices above
 
-      for (int i = 1; i < rows; ++i)
+      for (int i = 0; i < rows; i++)
        {
-         for (int j = 1; j < columns; ++j) 
+         for (int j = 0; j < columns; j++) 
          {
-            matrix1[i][j] = min(min(matrix1[i - 1][j - 1], matrix1[i][j - 1]), matrix1[i - 1][j]) + 1;
+            matrix1[i][j] = min(i,j);
          }
       }
 
@@ -72,41 +65,53 @@ namespace ariel {
  *          0 1 2 3 4
  *          0 1 2 3 4
  *          0 1 2 3 4
+*
+*
+*
 */
-
-      reverse_copy(matrix1.begin(), matrix1.end(), matrix2.begin());
-
-
-/*
-            0 0 0 0 0         0 0 0 0 0
- *          0 1 1 1 1         1 1 1 1 0
- *          0 1 2 2 2         2 2 2 1 0
- *          0 1 2 3 3    =>   3 3 2 1 0 
- *          0 1 2 3 4         4 3 2 1 0
- *          0 1 2 3 4         4 3 2 1 0
- *          0 1 2 3 4         4 3 2 1 0
-*/
-
-
-      for (int i = columns - 1, j = 0; i > j; --i, j++) 
-      {
-         for (auto & v: matrix2) 
+         for (int i = 0; i < rows; i++)
+       {
+         for (int j = 0; j < columns; j++) 
          {
-            swap(v[i], v[j]);
+            matrix2[i][j] = min(rows -i -1, columns -j -1);
          }
       }
 
-/*                   0 0 0 0 0               4 3 2 1 0
- *                   1 1 1 1 0               4 3 2 1 0
- *                   2 2 2 1 0               4 3 2 1 0
- *                   3 3 2 1 0      =>       3 3 2 1 0
- *                   4 3 2 1 0               2 2 2 1 0
- *                   4 3 2 1 0               1 1 1 1 0
- *                   4 3 2 1 0               0 0 0 0 0
+
+      
+
+/*
+*
+
+                                  4 3 2 1 0
+ *                                4 3 2 1 0
+ *                                4 3 2 1 0
+ *                                3 3 2 1 0
+ *                                2 2 2 1 0
+ *                                1 1 1 1 0
+ *                                0 0 0 0 0
+*
 */
 
 
-   
+         for (int i = 0; i < rows; i++)
+       {
+         for (int j = 0; j < columns; j++) 
+         {
+            matrixmin[i][j] = min(matrix1[i][j], matrix2[i][j]);
+         }
+       }
+
+
+
+
+         for (int i = 0; i < rows; i++)
+       {
+         for (int j = 0; j < columns; j++) 
+         {
+            matrixmin[i][j] = matrixmin[i][j]%2;
+         }
+       }  
 
  
 
@@ -114,9 +119,8 @@ namespace ariel {
       {
          for (int j = 0; j < columns; ++j) 
          {
-            matrixmin[i][j] = min(matrix1[i][j], matrix2[i][j]);
 
-            if(matrixmin[i][j]%2==0)
+            if(matrixmin[i][j]==0)
             {
                ans += char_a;
             }
@@ -179,3 +183,11 @@ namespace ariel {
 
    }
 }
+/**
+ * 
+ * 
+ *  
+ * Idea from https://codegolf.stackexchange.com/questions/241219/mat-printing-matrix
+ *
+ * 
+ */
